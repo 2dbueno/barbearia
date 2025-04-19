@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciamento de Clientes - Barbearia{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Menu Administrativo</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'admin_agendamentos' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Todos Agendamentos
+                    </a>
+                    <a href="{% url 'admin_agendamentos_dia' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-day me-2"></i> Agendamentos do Dia
+                    </a>
+                    <a href="{% url 'admin_agendamentos_semana' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-week me-2"></i> Agendamentos da Semana
+                    </a>
+                    <a href="{% url 'admin_agendamentos_mes' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Agendamentos do Mês
+                    </a>
+                    <a href="{% url 'admin_clientes' %}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-users me-2"></i> Gerenciar Clientes
+                    </a>
+                    <a href="/admin/" class="list-group-item list-group-item-action">
+                        <i class="fas fa-cog me-2"></i> Administração Django
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Gerenciamento de Clientes</h3>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Buscar cliente..." aria-label="Buscar">
+                        <button class="btn btn-outline-light" type="submit">Buscar</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>CPF</th>
+                                    <th>Telefone</th>
+                                    <th>Email</th>
+                                    <th>Data de Cadastro</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cliente in clientes %}
+                                    <tr>
+                                        <td>{{ cliente.user.get_full_name }}</td>
+                                        <td>{{ cliente.cpf }}</td>
+                                        <td>{{ cliente.telefone }}</td>
+                                        <td>{{ cliente.user.email }}</td>
+                                        <td>{{ cliente.data_cadastro|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <a href="{% url 'admin_agendar' cliente.cpf %}" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-calendar-plus"></i> Agendar
+                                            </a>
+                                            <a href="{% url 'admin_cliente_historico' cliente.id %}" class="btn btn-info btn-sm text-white">
+                                                <i class="fas fa-history"></i> Histórico
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Nenhum cliente cadastrado.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    <nav aria-label="Navegação de página">
+                        <ul class="pagination justify-content-center">
+                            {% if clientes.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">&laquo; Primeira</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ clientes.previous_page_number }}">Anterior</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">&laquo; Primeira</a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Anterior</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    Página {{ clientes.number }} de {{ clientes.paginator.num_pages }}
+                                </span>
+                            </li>
+                            
+                            {% if clientes.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ clientes.next_page_number }}">Próxima</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ clientes.paginator.num_pages }}">Última &raquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Próxima</a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Última &raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

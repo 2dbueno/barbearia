@@ -1,0 +1,331 @@
+/* Estilos principais do sistema de barbearia */
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #e74c3c;
+    --accent-color: #f39c12;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+    --success-color: #27ae60;
+    --danger-color: #c0392b;
+    --text-color: #333;
+    --border-radius: 5px;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    background-color: #f8f9fa;
+  }
+  
+  /* Navbar personalizada */
+  .navbar-dark.bg-dark {
+    background-color: var(--primary-color) !important;
+  }
+  
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  
+  .navbar-brand i {
+    color: var(--accent-color);
+  }
+  
+  /* Botões personalizados */
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-primary:hover {
+    background-color: #1a252f;
+    border-color: #1a252f;
+  }
+  
+  .btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+  }
+  
+  /* Cards */
+  .card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 20px;
+    border: none;
+  }
+  
+  .card-header {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+  }
+  
+  /* Hero section */
+  .hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 30px;
+  }
+  
+  /* Seções */
+  .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  
+  .section-title:after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-color);
+    margin: 15px auto 0;
+  }
+  
+  /* Cards de serviços */
+  .service-card {
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .service-card i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+  }
+  
+  .service-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Cards de barbeiros */
+  .barber-card {
+    text-align: center;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .barber-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .barber-card img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 5px solid var(--light-color);
+    box-shadow: var(--box-shadow);
+  }
+  
+  .barber-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  /* Formulários */
+  .form-control {
+    border-radius: var(--border-radius);
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+  }
+  
+  /* Agendamentos */
+  .appointment-card {
+    border-left: 4px solid var(--accent-color);
+  }
+  
+  .appointment-date {
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+  
+  .appointment-time {
+    font-weight: 700;
+    color: var(--secondary-color);
+  }
+  
+  /* Footer */
+  footer {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 40px 0;
+  }
+  
+  footer h5 {
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  footer a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  footer a:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 60px 0;
+    }
+    
+    .hero h1 {
+      font-size: 2.2rem;
+    }
+    
+    .hero p {
+      font-size: 1rem;
+    }
+    
+    .section-title {
+      margin-bottom: 30px;
+    }
+    
+    .barber-card img {
+      width: 150px;
+      height: 150px;
+    }
+  }
+  
+  /* Animações */
+  .fade-in {
+    animation: fadeIn 1s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Mapa */
+  .map-container {
+    height: 400px;
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+  }
+  
+  /* Galeria */
+  .gallery-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    transition: transform 0.3s;
+  }
+  
+  .gallery-img:hover {
+    transform: scale(1.03);
+  }
+  
+  /* Alertas personalizados */
+  .alert {
+    border-radius: var(--border-radius);
+    border: none;
+  }
+  
+  .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  /* Calendário de agendamentos */
+  .calendar-day {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .calendar-day-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    font-weight: 600;
+  }
+  
+  .time-slot {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .time-slot:last-child {
+    border-bottom: none;
+  }
+  
+  .time-slot.booked {
+    background-color: #f8d7da;
+  }
+  
+  .time-slot.available {
+    background-color: #d4edda;
+    cursor: pointer;
+  }
+  
+  .time-slot.available:hover {
+    background-color: #c3e6cb;
+  }
+  
+  /* Estilo para seções tipo card */
+  .card-section {
+    background-color: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 40px;
+  }

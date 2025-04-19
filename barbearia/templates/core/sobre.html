@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('{% static "img/sobre-bg.jpg" %}');">
+  <div class="container">
+    <h1>Sobre a Barbearia</h1>
+    <p>Conheça nossa história, valores e os profissionais por trás do estilo e precisão.</p>
+  </div>
+</section>
+
+<section class="container card-section">
+    <div class="section-title">
+      <h2>Nossa História</h2>
+    </div>
+    <p>
+      Fundada em 2015, a Barbearia Estilo & Precisão nasceu do sonho de transformar o cuidado masculino em uma verdadeira experiência...
+    </p>
+  </section>
+  
+
+<section class="container card-section">
+    <div class="section-title">
+      <h2>O Fundador</h2>
+    </div>
+    <div class="row align-items-center barber-card">
+      <div class="col-md-4">
+        <img src="{% static 'img/fundador.jpg' %}" alt="Foto do fundador">
+      </div>
+      <div class="col-md-8">
+        <h3>João Carlos Ferreira</h3>
+        <p>
+          Apaixonado por cortes desde a adolescência, João Carlos iniciou sua jornada com uma cadeira de barbeiro herdada do avô. Com visão empreendedora e talento nato, construiu a Estilo & Precisão como um espaço onde tradição e modernidade caminham juntas.
+        </p>
+      </div>
+    </div>
+</section>  
+
+<section class="container card-section">
+  <div class="section-title">
+    <h2>Nossa Equipe</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="barber-card">
+        <img src="{% static 'img/barbeiro1.jpg' %}" alt="Barbeiro 1">
+        <h3>Lucas Mendes</h3>
+        <p>Especialista em cortes modernos e fades precisos.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="barber-card">
+        <img src="{% static 'img/barbeiro2.jpg' %}" alt="Barbeiro 2">
+        <h3>Rafael Silva</h3>
+        <p>Referência em cortes clássicos e barbas modeladas.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="barber-card">
+        <img src="{% static 'img/barbeiro3.jpg' %}" alt="Barbeiro 3">
+        <h3>André Costa</h3>
+        <p>Detalhista e criativo, expert em design de cortes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

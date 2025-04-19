@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Barbearia - Início{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Barbearia Estilo & Precisão</h1>
+        <p>Cortes modernos e atendimento de qualidade para homens que valorizam estilo e bem-estar.</p>
+        <a href="{% url 'agendar' %}" class="btn btn-lg btn-secondary">Agendar Horário</a>
+    </div>
+</section>
+
+<!-- Serviços -->
+<section class="container my-5">
+    <h2 class="section-title">Nossos Serviços</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="service-card card h-100">
+                <div class="card-body">
+                    <i class="fas fa-cut"></i>
+                    <h3>Corte de Cabelo</h3>
+                    <p>Cortes modernos e tradicionais realizados com técnica e precisão para valorizar seu estilo.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="service-card card h-100">
+                <div class="card-body">
+                    <i class="fas fa-razor"></i>
+                    <h3>Barba</h3>
+                    <p>Modelagem e aparagem de barba com toalha quente e produtos especiais para um acabamento perfeito.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="service-card card h-100">
+                <div class="card-body">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Bigode</h3>
+                    <p>Cuidados especiais para o seu bigode, com modelagem e acabamento que destacam sua personalidade.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Barbeiros -->
+<section class="container my-5">
+    <h2 class="section-title">Nossos Barbeiros</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="barber-card">
+                <img src="{% static 'img/barber-placeholder.jpg' %}" alt="Barbeiro" class="img-fluid">
+                <h3>Carlos Silva</h3>
+                <p>Especialista em cortes modernos e barba</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="barber-card">
+                <img src="{% static 'img/barber-placeholder.jpg' %}" alt="Barbeiro" class="img-fluid">
+                <h3>Marcos Oliveira</h3>
+                <p>Mestre em degradês e acabamentos precisos</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="barber-card">
+                <img src="{% static 'img/barber-placeholder.jpg' %}" alt="Barbeiro" class="img-fluid">
+                <h3>Rafael Santos</h3>
+                <p>Especializado em estilos clássicos e vintage</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Galeria -->
+<section class="container my-5">
+    <h2 class="section-title">Nossa Barbearia</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{% static 'img/shop-placeholder.jpg' %}" alt="Barbearia" class="gallery-img">
+        </div>
+        <div class="col-md-4">
+            <img src="{% static 'img/shop-placeholder.jpg' %}" alt="Barbearia" class="gallery-img">
+        </div>
+        <div class="col-md-4">
+            <img src="{% static 'img/shop-placeholder.jpg' %}" alt="Barbearia" class="gallery-img">
+        </div>
+        <div class="col-md-4">
+            <img src="{% static 'img/shop-placeholder.jpg' %}" alt="Barbearia" class="gallery-img">
+        </div>
+        <div class="col-md-4">
+            <img src="{% static 'img/shop-placeholder.jpg' %}" alt="Barbearia" class="gallery-img">
+        </div>
+        <div class="col-md-4">
+            <img src="{% static 'img/shop-placeholder.jpg' %}" alt="Barbearia" class="gallery-img">
+        </div>
+    </div>
+</section>
+
+<!-- Localização -->
+<section class="container my-5">
+    <h2 class="section-title">Nossa Localização</h2>
+    <div id="map" class="map-container"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Endereço</div>
+                <div class="card-body">
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Rua Exemplo, 123 - Centro</p>
+                    <p><i class="fas fa-phone me-2"></i> (11) 99999-9999</p>
+                    <p><i class="fas fa-envelope me-2"></i> contato@barbearia.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Horário de Funcionamento</div>
+                <div class="card-body">
+                    <p><strong>Segunda a Sexta:</strong> 09:00 - 19:00</p>
+                    <p><strong>Sábado:</strong> 09:00 - 18:00</p>
+                    <p><strong>Domingo:</strong> Fechado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar o mapa
+        var map = L.map('map').setView([-23.203658506327773, -45.908235347724144], 15); // Coordenadas de exemplo (São Paulo)
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Adicionar marcador
+        L.marker([-23.203658506327773, -45.908235347724144]).addTo(map)
+            .bindPopup('Colinhas Shopping<br>Primeiro andar, Sala 3')
+            .openPopup();
+    });
+</script>
+{% endblock %}

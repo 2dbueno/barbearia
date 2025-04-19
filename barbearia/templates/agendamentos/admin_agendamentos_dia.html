@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendamentos do Dia - Barbearia{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Menu Administrativo</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'admin_agendamentos' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Todos Agendamentos
+                    </a>
+                    <a href="{% url 'admin_agendamentos_dia' %}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-calendar-day me-2"></i> Agendamentos do Dia
+                    </a>
+                    <a href="{% url 'admin_agendamentos_semana' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-week me-2"></i> Agendamentos da Semana
+                    </a>
+                    <a href="{% url 'admin_agendamentos_mes' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Agendamentos do Mês
+                    </a>
+                    <a href="/admin/" class="list-group-item list-group-item-action">
+                        <i class="fas fa-cog me-2"></i> Administração Django
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Ações Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'admin_agendar' 'buscar' %}" method="GET" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" name="cpf" class="form-control" placeholder="CPF do cliente" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">Digite o CPF para agendar</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Agendamentos do Dia ({{ data|date:"d/m/Y" }})</h3>
+                    <span class="badge bg-primary">{{ agendamentos.count }} agendamento(s)</span>
+                </div>
+                <div class="card-body">
+                    {% if agendamentos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Horário</th>
+                                        <th>Cliente</th>
+                                        <th>Telefone</th>
+                                        <th>Barbeiro</th>
+                                        <th>Serviço</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for agendamento in agendamentos %}
+                                        <tr>
+                                            <td>{{ agendamento.horario }}</td>
+                                            <td>{{ agendamento.cliente.user.get_full_name }}</td>
+                                            <td>{{ agendamento.cliente.telefone }}</td>
+                                            <td>{{ agendamento.barbeiro.nome }}</td>
+                                            <td>{{ agendamento.servico.get_tipo_display }}</td>
+                                            <td>
+                                                <a href="{% url 'cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja cancelar este agendamento?')">
+                                                    <i class="fas fa-times"></i> Cancelar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <p class="mb-0">Não há agendamentos para hoje.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Visão de Horários</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for hora in '9,10,11,12,13,14,15,16,17,18,19'|split:',' %}
+                            {% for minuto in '00,30'|split:',' %}
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-header p-2 text-center">
+                                            {{ hora }}:{{ minuto }}
+                                        </div>
+                                        <div class="card-body p-2">
+                                            {% with horario_atual=hora|add:':'|add:minuto %}
+                                                {% for agendamento in agendamentos %}
+                                                    {% if agendamento.horario|time:"H:i" == horario_atual %}
+                                                        <small class="d-block text-truncate">
+                                                            <i class="fas fa-user me-1"></i> {{ agendamento.cliente.user.get_full_name }}
+                                                        </small>
+                                                        <small class="d-block text-truncate">
+                                                            <i class="fas fa-cut me-1"></i> {{ agendamento.servico.get_tipo_display }}
+                                                        </small>
+                                                        <small class="d-block text-truncate">
+                                                            <i class="fas fa-user-tie me-1"></i> {{ agendamento.barbeiro.nome }}
+                                                        </small>
+                                                    {% endif %}
+                                                {% empty %}
+                                                    <small class="text-muted">Disponível</small>
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Função para dividir string por delimitador (usado no template)
+    var split = function(val, delim) {
+        return val.split(delim);
+    };
+    
+    // Registrar filtro personalizado
+    if (typeof django !== 'undefined' && django.template) {
+        django.template.defaultfilters.split = split;
+    }
+</script>
+{% endblock %}

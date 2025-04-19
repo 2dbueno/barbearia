@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin - Agendar para Cliente - Barbearia{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Menu Administrativo</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'admin_agendamentos' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Todos Agendamentos
+                    </a>
+                    <a href="{% url 'admin_agendamentos_dia' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-day me-2"></i> Agendamentos do Dia
+                    </a>
+                    <a href="{% url 'admin_agendamentos_semana' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-week me-2"></i> Agendamentos da Semana
+                    </a>
+                    <a href="{% url 'admin_agendamentos_mes' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Agendamentos do Mês
+                    </a>
+                    <a href="/admin/" class="list-group-item list-group-item-action">
+                        <i class="fas fa-cog me-2"></i> Administração Django
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0">Agendar para Cliente</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_cpf" class="form-label">CPF do Cliente</label>
+                                <input type="text" name="cpf" id="id_cpf" class="form-control" value="{{ form.cpf.value|default:'' }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe o CPF do cliente.
+                                </div>
+                                {% if form.cpf.errors %}
+                                    <div class="text-danger">
+                                        {{ form.cpf.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_barbeiro" class="form-label">Barbeiro</label>
+                                {{ form.barbeiro }}
+                                {% if form.barbeiro.errors %}
+                                    <div class="text-danger">
+                                        {{ form.barbeiro.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_servico" class="form-label">Serviço</label>
+                                {{ form.servico }}
+                                {% if form.servico.errors %}
+                                    <div class="text-danger">
+                                        {{ form.servico.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_data" class="form-label">Data</label>
+                                {{ form.data }}
+                                {% if form.data.errors %}
+                                    <div class="text-danger">
+                                        {{ form.data.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_horario" class="form-label">Horário</label>
+                                {{ form.horario }}
+                                {% if form.horario.errors %}
+                                    <div class="text-danger">
+                                        {{ form.horario.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_observacoes" class="form-label">Observações</label>
+                            {{ form.observacoes }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+                        <a href="{% url 'admin_agendamentos' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

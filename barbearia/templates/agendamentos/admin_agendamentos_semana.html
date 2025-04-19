@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendamentos da Semana - Barbearia{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Menu Administrativo</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'admin_agendamentos' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Todos Agendamentos
+                    </a>
+                    <a href="{% url 'admin_agendamentos_dia' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-day me-2"></i> Agendamentos do Dia
+                    </a>
+                    <a href="{% url 'admin_agendamentos_semana' %}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-calendar-week me-2"></i> Agendamentos da Semana
+                    </a>
+                    <a href="{% url 'admin_agendamentos_mes' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Agendamentos do Mês
+                    </a>
+                    <a href="/admin/" class="list-group-item list-group-item-action">
+                        <i class="fas fa-cog me-2"></i> Administração Django
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Ações Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'admin_agendar' 'buscar' %}" method="GET" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" name="cpf" class="form-control" placeholder="CPF do cliente" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">Digite o CPF para agendar</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Agendamentos da Semana ({{ inicio|date:"d/m/Y" }} - {{ fim|date:"d/m/Y" }})</h3>
+                    <span class="badge bg-primary">{{ agendamentos.count }} agendamento(s)</span>
+                </div>
+                <div class="card-body">
+                    {% if agendamentos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Horário</th>
+                                        <th>Cliente</th>
+                                        <th>Telefone</th>
+                                        <th>Barbeiro</th>
+                                        <th>Serviço</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for agendamento in agendamentos %}
+                                        <tr>
+                                            <td>{{ agendamento.data|date:"d/m/Y" }}</td>
+                                            <td>{{ agendamento.horario }}</td>
+                                            <td>{{ agendamento.cliente.user.get_full_name }}</td>
+                                            <td>{{ agendamento.cliente.telefone }}</td>
+                                            <td>{{ agendamento.barbeiro.nome }}</td>
+                                            <td>{{ agendamento.servico.get_tipo_display }}</td>
+                                            <td>
+                                                <a href="{% url 'cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja cancelar este agendamento?')">
+                                                    <i class="fas fa-times"></i> Cancelar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <p class="mb-0">Não há agendamentos para esta semana.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Visão Semanal</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for i in '0,1,2,3,4,5,6'|split:',' %}
+                            {% with dia_atual=inicio|date:'Y-m-d'|add_days:i %}
+                                <div class="col-md-12 mb-3">
+                                    <div class="card">
+                                        <div class="card-header bg-light">
+                                            <strong>{{ dia_atual|date:"l, d/m/Y"|capfirst }}</strong>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm mb-0">
+                                                    <tbody>
+                                                        {% for agendamento in agendamentos %}
+                                                            {% if agendamento.data|date:'Y-m-d' == dia_atual|date:'Y-m-d' %}
+                                                                <tr>
+                                                                    <td width="10%">{{ agendamento.horario }}</td>
+                                                                    <td width="25%">{{ agendamento.cliente.user.get_full_name }}</td>
+                                                                    <td width="20%">{{ agendamento.barbeiro.nome }}</td>
+                                                                    <td width="25%">{{ agendamento.servico.get_tipo_display }}</td>
+                                                                    <td width="20%">
+                                                                        <a href="{% url 'cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja cancelar este agendamento?')">
+                                                                            <i class="fas fa-times"></i> Cancelar
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% with dia_agendamentos=agendamentos|filter_by_date:dia_atual %}
+                                                            {% if not dia_agendamentos %}
+                                                                <tr>
+                                                                    <td colspan="5" class="text-center text-muted">Nenhum agendamento para este dia</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        {% endwith %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Função para dividir string por delimitador (usado no template)
+    var split = function(val, delim) {
+        return val.split(delim);
+    };
+    
+    // Função para adicionar dias a uma data (usado no template)
+    var addDays = function(dateStr, days) {
+        var date = new Date(dateStr);
+        date.setDate(date.getDate() + parseInt(days));
+        return date.toISOString().split('T')[0];
+    };
+    
+    // Função para filtrar agendamentos por data (usado no template)
+    var filterByDate = function(agendamentos, dateStr) {
+        return agendamentos.filter(function(a) {
+            return a.data === dateStr;
+        });
+    };
+    
+    // Registrar filtros personalizados
+    if (typeof django !== 'undefined' && django.template) {
+        django.template.defaultfilters.split = split;
+        django.template.defaultfilters.add_days = addDays;
+        django.template.defaultfilters.filter_by_date = filterByDate;
+    }
+</script>
+{% endblock %}

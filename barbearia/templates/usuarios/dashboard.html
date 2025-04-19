@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Barbearia{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Menu</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                    <a href="{% url 'perfil' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i> Meu Perfil
+                    </a>
+                    <a href="{% url 'listar_agendamentos' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Meus Agendamentos
+                    </a>
+                    <a href="{% url 'agendar' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-clock me-2"></i> Agendar Horário
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="mb-0">Bem-vindo, {{ user.first_name }}!</h3>
+                </div>
+                <div class="card-body">
+                    <p>Este é o seu painel de controle onde você pode gerenciar seus agendamentos e informações pessoais.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card bg-primary text-white mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-calendar-check me-2"></i> Próximo Agendamento</h5>
+                                    {% if proximo_agendamento %}
+                                        <p class="card-text">
+                                            <strong>Data:</strong> {{ proximo_agendamento.data|date:"d/m/Y" }}<br>
+                                            <strong>Horário:</strong> {{ proximo_agendamento.horario }}<br>
+                                            <strong>Barbeiro:</strong> {{ proximo_agendamento.barbeiro.nome }}<br>
+                                            <strong>Serviço:</strong> {{ proximo_agendamento.servico.get_tipo_display }}
+                                        </p>
+                                        <a href="{% url 'listar_agendamentos' %}" class="btn btn-light btn-sm">Ver Detalhes</a>
+                                    {% else %}
+                                        <p class="card-text">Você não possui agendamentos futuros.</p>
+                                        <a href="{% url 'agendar' %}" class="btn btn-light btn-sm">Agendar Agora</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-success text-white mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-history me-2"></i> Histórico</h5>
+                                    <p class="card-text">
+                                        <strong>Total de visitas:</strong> {{ total_agendamentos }}<br>
+                                        <strong>Último atendimento:</strong> 
+                                        {% if ultimo_agendamento %}
+                                            {{ ultimo_agendamento.data|date:"d/m/Y" }}
+                                        {% else %}
+                                            Nenhum
+                                        {% endif %}
+                                    </p>
+                                    <a href="{% url 'listar_agendamentos' %}" class="btn btn-light btn-sm">Ver Histórico</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Ações Rápidas</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <a href="{% url 'agendar' %}" class="btn btn-primary btn-lg d-block">
+                                <i class="fas fa-calendar-plus mb-2 d-block" style="font-size: 2rem;"></i>
+                                Novo Agendamento
+                            </a>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <a href="{% url 'listar_agendamentos' %}" class="btn btn-secondary btn-lg d-block">
+                                <i class="fas fa-list mb-2 d-block" style="font-size: 2rem;"></i>
+                                Meus Agendamentos
+                            </a>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <a href="{% url 'perfil' %}" class="btn btn-info btn-lg d-block text-white">
+                                <i class="fas fa-user-edit mb-2 d-block" style="font-size: 2rem;"></i>
+                                Editar Perfil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

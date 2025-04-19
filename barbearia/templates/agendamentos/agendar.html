@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Agendar Horário - Barbearia{% endblock %}
+
+{% block extra_css %}
+<style>
+    .time-slot {
+        padding: 10px;
+        margin: 5px;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .time-slot.available {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+    }
+    .time-slot.available:hover {
+        background-color: #c3e6cb;
+        transform: scale(1.05);
+    }
+    .time-slot.unavailable {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+    .time-slot.selected {
+        background-color: #cce5ff;
+        border: 1px solid #b8daff;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Menu</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                    <a href="{% url 'perfil' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i> Meu Perfil
+                    </a>
+                    <a href="{% url 'listar_agendamentos' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i> Meus Agendamentos
+                    </a>
+                    <a href="{% url 'agendar' %}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-clock me-2"></i> Agendar Horário
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Agendar Horário</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="agendamento-form" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.barbeiro|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.servico|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.data|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info d-none" id="mensagem-disponibilidade">
+                            Selecione um barbeiro e uma data para ver os horários disponíveis.
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Horários Disponíveis</label>
+                            <div class="row" id="horarios-disponiveis">
+                                <!-- Os horários serão carregados dinamicamente via JavaScript -->
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot available" data-time="09:00">09:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot available" data-time="09:30">09:30</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot available" data-time="10:00">10:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot unavailable" data-time="10:30">10:30</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot available" data-time="11:00">11:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot available" data-time="11:30">11:30</div>
+                                </div>
+                                <!-- Mais horários seriam adicionados aqui -->
+                            </div>
+                            {{ form.horario|as_crispy_field }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.observacoes|as_crispy_field }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Esconder o campo de horário original (será preenchido via JavaScript)
+        const horarioOriginal = document.getElementById('div_id_horario');
+        if (horarioOriginal) {
+            horarioOriginal.style.display = 'none';
+        }
+        
+        // Selecionar horário ao clicar
+        const timeSlots = document.querySelectorAll('.time-slot.available');
+        const horarioInput = document.getElementById('id_horario');
+        
+        timeSlots.forEach(slot => {
+            slot.addEventListener('click', function() {
+                // Remover seleção anterior
+                document.querySelectorAll('.time-slot.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                
+                // Adicionar seleção atual
+                this.classList.add('selected');
+                
+                // Atualizar o campo oculto
+                if (horarioInput) {
+                    horarioInput.value = this.dataset.time;
+                }
+            });
+        });
+        
+        // Verificar disponibilidade ao mudar data ou barbeiro
+        const dataInput = document.getElementById('id_data');
+        const barbeiroInput = document.getElementById('id_barbeiro');
+        const mensagemDisponibilidade = document.getElementById('mensagem-disponibilidade');
+        
+        function verificarDisponibilidade() {
+            if (dataInput.value && barbeiroInput.value) {
+                mensagemDisponibilidade.textContent = 'Verificando horários disponíveis...';
+                mensagemDisponibilidade.classList.remove('d-none');
+                mensagemDisponibilidade.classList.remove('alert-success');
+                mensagemDisponibilidade.classList.add('alert-info');
+                
+                // Aqui seria feita uma requisição AJAX para verificar horários disponíveis
+                // Simulando resposta após 1 segundo
+                setTimeout(() => {
+                    mensagemDisponibilidade.textContent = 'Horários atualizados conforme disponibilidade para ' + dataInput.value;
+                    mensagemDisponibilidade.classList.remove('alert-info');
+                    mensagemDisponibilidade.classList.add('alert-success');
+                }, 1000);
+            } else {
+                mensagemDisponibilidade.classList.add('d-none');
+            }
+        }
+        
+        if (dataInput && barbeiroInput) {
+            dataInput.addEventListener('change', verificarDisponibilidade);
+            barbeiroInput.addEventListener('change', verificarDisponibilidade);
+        }
+        
+        // Validação do formulário
+        const form = document.getElementById('agendamento-form');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!horarioInput || !horarioInput.value) {
+                    event.preventDefault();
+                    alert('Por favor, selecione um horário disponível.');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

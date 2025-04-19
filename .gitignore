@@ -1,0 +1,30 @@
+# Ambientes virtuais
+venv/
+.env/
+*.env
+
+# Bytecode Python
+__pycache__/
+*.py[cod]
+
+# Arquivos de log
+*.log
+
+# Banco de dados local (se for SQLite)
+db.sqlite3
+
+# Arquivos de migração desnecessários
+*.sqlite3
+*.pyc
+
+# IDEs e editores
+.vscode/
+.idea/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Static e media (se for gerado automaticamente)
+staticfiles/
+media/
